@@ -157,6 +157,8 @@ async function bootstrap() {
     .build();
 
   const document = SwaggerModule.createDocument(app, config);
+  // Apply X-API-Key globally so Swagger "Authorize" attaches the header to all endpoints
+  document.security = [{ 'X-API-Key': [] }];
   SwaggerModule.setup('api/docs', app, document);
 
   const port = process.env.PORT || 2785;
