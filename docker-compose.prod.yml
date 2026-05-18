@@ -86,6 +86,8 @@ services:
     restart: unless-stopped
     expose:
       - '80'
+    links:
+      - openwa-api:openwa
     depends_on:
       - openwa-api
     networks:
