@@ -1,8 +1,9 @@
 # OpenWA - Docker Compose for Development
-# Quick Start: docker compose -f docker-compose.dev.yml up -d
+# Usage:
+#   cp .env.dev.example .env.dev   # optional
+#   docker compose -f docker-compose.dev.yml up -d --build
 
 services:
-  # API Backend
   openwa:
     build:
       context: .
@@ -10,21 +11,8 @@ services:
     container_name: openwa-api
     ports:
       - '127.0.0.1:2785:2785'
-    environment:
-      - NODE_ENV=development
-      - PORT=2785
-      - DATABASE_TYPE=sqlite
-      - DATABASE_NAME=/app/data/openwa.sqlite
-      - DATABASE_SYNCHRONIZE=true
-      - ENGINE_TYPE=whatsapp-web.js
-      - SESSION_DATA_PATH=/app/data/sessions
-      - PUPPETEER_HEADLESS=true
-      - PUPPETEER_ARGS=--no-sandbox,--disable-setuid-sandbox,--disable-dev-shm-usage,--disable-gpu
-      - STORAGE_TYPE=local
-      - STORAGE_LOCAL_PATH=/app/data/media
-      - WEBHOOK_TIMEOUT=10000
-      - WEBHOOK_MAX_RETRIES=3
-      - QUEUE_ENABLED=false
+    env_file:
+      - .env.dev
     volumes:
       - ./data:/app/data
     restart: unless-stopped
@@ -41,7 +29,6 @@ services:
       retries: 3
       start_period: 30s
 
-  # Dashboard Frontend
   dashboard:
     build:
       context: ./dashboard
